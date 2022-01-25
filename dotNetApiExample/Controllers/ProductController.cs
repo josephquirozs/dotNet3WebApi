@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using dotNetApiExample.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,48 +22,76 @@ namespace dotNetApiExample.Controllers
 
         // GET: api/products
         [HttpGet(ProductEndpoints.GetAll)]
-        public IEnumerable<Product> GetAll()
+        public async Task<IEnumerable<Product>> GetAll()
         {
             _logger.LogInformation($"Executing GET request to endpoint '{ProductEndpoints.GetAll}'");
-            return _myDbContext.Products.ToList();
+            return await _myDbContext.Products.ToListAsync();
         }
 
         // GET api/products/5
         [HttpGet(ProductEndpoints.GetOne)]
-        public Product GetOne(long productId)
+        public async Task<ActionResult<Product>> GetOne(long productId)
         {
             _logger.LogInformation($"Executing GET request to endpoint '{ProductEndpoints.GetOne}'");
-            return _myDbContext.Products.Find(productId);
+            Product resource = await _myDbContext.Products.FindAsync(productId);
+            if (resource == null)
+            {
+                return BadRequest("Resource not found");
+            }
+            return Ok(resource);
         }
 
         // POST api/products
         [HttpPost(ProductEndpoints.Post)]
-        public Product Post([FromBody] Product resource)
+        public async Task<ActionResult<Product>> Post([FromBody] Product resource)
         {
             _logger.LogInformation($"Executing POST request to endpoint '{ProductEndpoints.Post}'");
+            if (resource.ProductId != null)
+            {
+                return BadRequest("Property 'productId' should be sent as null");
+            }
             _myDbContext.Products.Add(resource);
-            _myDbContext.SaveChanges();
-            return resource;
+            await _myDbContext.SaveChangesAsync();
+            return Ok(resource);
         }
 
         // PUT api/products
         [HttpPut(ProductEndpoints.Put)]
-        public Product Put([FromBody] Product resource)
+        public async Task<ActionResult<Product>> Put([FromBody] Product resource)
         {
             _logger.LogInformation($"Executing PUT request to endpoint '{ProductEndpoints.Put}'");
-            _myDbContext.Entry(resource).State = EntityState.Modified;
-            _myDbContext.SaveChanges();
-            return resource;
+            if (resource.ProductId == null)
+            {
+                return BadRequest("Property 'productId' must not be sent as null");
+            }
+            Product serverResource = await _myDbContext.Products.FindAsync(resource.ProductId);
+            if (serverResource == null)
+            {
+                return BadRequest("Resource not found");
+            }
+            serverResource.ProductId = resource.ProductId;
+            serverResource.Name = resource.Name;
+            serverResource.Price = resource.Price;
+            serverResource.Stock = resource.Stock;
+            serverResource.Unit = resource.Unit;
+            serverResource.Expiration = resource.Expiration;
+            await _myDbContext.SaveChangesAsync();
+            return Ok(serverResource);
         }
 
         // DELETE api/products/5
         [HttpDelete(ProductEndpoints.Delete)]
-        public void Delete(long productId)
+        public async Task<IActionResult> Delete(long productId)
         {
             _logger.LogInformation($"Executing DELETE request to endpoint '{ProductEndpoints.Delete}'");
-            var resource = _myDbContext.Products.Find(productId);
+            Product resource = await _myDbContext.Products.FindAsync(productId);
+            if (resource == null)
+            {
+                return BadRequest("Resource not found");
+            }
             _myDbContext.Products.Remove(resource);
-            _myDbContext.SaveChanges();
+            await _myDbContext.SaveChangesAsync();
+            return Ok();
         }
     }
 }
