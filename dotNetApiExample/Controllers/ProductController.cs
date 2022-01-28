@@ -22,10 +22,24 @@ namespace dotNetApiExample.Controllers
 
         // GET: api/products
         [HttpGet(ProductEndpoints.GetAll)]
-        public async Task<IEnumerable<Product>> GetAll()
+        public async Task<IEnumerable<Product>> GetAll(
+            [FromQuery] int? pageNumber,
+            [FromQuery] int? pageSize,
+            [FromQuery] string searchValue
+        )
         {
             _logger.LogInformation($"Executing GET request to endpoint '{ProductEndpoints.GetAll}'");
-            return await _myDbContext.Products.ToListAsync();
+            int fPageNumber = pageNumber ?? 1;
+            int fPageSize = pageSize ?? 10;
+            string fSearchValue = searchValue == null ? "%%" : $"%{searchValue.Trim().ToUpper()}%";
+            int offsetValue = (fPageNumber - 1) * fPageSize;
+            return await _myDbContext.Products.FromSqlInterpolated($@"
+                select *
+                from dbo.product p
+                where p.name like {fSearchValue}
+                order by p.product_id desc
+                offset {offsetValue} rows fetch next {fPageSize} rows only
+            ").ToListAsync();
         }
 
         // GET api/products/5
