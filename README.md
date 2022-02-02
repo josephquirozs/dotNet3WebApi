@@ -1,6 +1,9 @@
 ﻿# dotNet3WebApi
 ASP.NET Core web API example.
 
+## Specifications
+* .NET Core 3.1
+
 ## Install database manually
 Execute script file [create_database.sql](database/create_database.sql) in your server
 
