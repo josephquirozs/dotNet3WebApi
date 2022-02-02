@@ -1,4 +1,4 @@
-﻿# dotNetApiExample
+﻿# dotNet3WebApi
 ASP.NET Core web API example.
 
 ## Install database manually
