@@ -1,7 +1,7 @@
 ﻿# dotNet3WebApi
 ASP.NET Core web API example.
 
-## Specifications
+## Requirements
 * .NET Core 3.1
 
 ## Install database manually
