@@ -1,5 +1,8 @@
 ﻿USE [my_database]
 GO
+
+--########################################################
+
 INSERT INTO product
     (name, price, stock, unit, expiration)
 VALUES
@@ -500,3 +503,31 @@ INSERT INTO product
 VALUES
     ('PRODUCTO #100 UND', 100.10, 100.00, 'UND', '2020-05-22 00:00:00')
 GO
+
+--########################################################
+
+INSERT INTO customer
+    (customer_id, name, credit_line, is_vip, member_since)
+VALUES
+    (1, 'LUIS', 100.00, 0, '2022-03-02 12:25:26')
+GO
+INSERT INTO customer
+    (customer_id, name, credit_line, is_vip, member_since)
+VALUES
+    (2, 'MARTIN', 200.00, 0, '2022-03-02 12:25:26')
+GO
+INSERT INTO customer
+    (customer_id, name, credit_line, is_vip, member_since)
+VALUES
+    (3, 'LUCAS', 300.00, 0, '2022-03-02 12:25:26')
+GO
+INSERT INTO customer
+    (customer_id, name, credit_line, is_vip, member_since)
+VALUES
+    (4, 'JOSEPH', 400.00, 0, '2022-03-02 12:25:26')
+GO
+INSERT INTO customer
+    (customer_id, name, credit_line, is_vip, member_since)
+VALUES
+    (5, 'YOHANA', 999999.00, 1, '2022-03-02 12:25:26')
+
