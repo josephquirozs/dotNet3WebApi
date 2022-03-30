@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace dotNetApiExample.Controllers
 {
-    [Route("api")]
+    [Route("my-api")]
     [ApiController]
     public class CustomerController : ControllerBase
     {
