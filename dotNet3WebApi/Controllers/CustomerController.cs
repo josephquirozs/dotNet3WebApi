@@ -41,5 +41,19 @@ namespace dotNetApiExample.Controllers
                 offset {offsetValue} rows fetch next {fPageSize} rows only
             ").ToListAsync();
         }
+
+        // POST api/customers
+        [HttpPost(CustomerEndpoints.Post)]
+        public async Task<ActionResult<Customer>> Post([FromBody] Customer resource)
+        {
+            _logger.LogInformation($"Executing POST request to endpoint '{CustomerEndpoints.Post}'");
+            if (resource.CustomerId != null)
+            {
+                return BadRequest("Property 'customerId' should be sent as null");
+            }
+            _myDbContext.Customers.Add(resource);
+            await _myDbContext.SaveChangesAsync();
+            return Ok(resource);
+        }
     }
 }
