@@ -28,16 +28,15 @@ GO
 --########################################################
 
 CREATE TABLE [dbo].[customer](
-	[customer_id] [bigint] NOT NULL,
+	[customer_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[name] [varchar](100) NULL,
 	[credit_line] [decimal](8, 2) NULL,
 	[is_vip] [bit] NULL,
-	[member_since] [datetime] NULL
-) ON [PRIMARY]
-GO
-ALTER TABLE [dbo].[customer] ADD  CONSTRAINT [PK_customer] PRIMARY KEY CLUSTERED 
+	[member_since] [datetime] NULL,
+ CONSTRAINT [PK_customer] PRIMARY KEY CLUSTERED 
 (
 	[customer_id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
 GO
 
