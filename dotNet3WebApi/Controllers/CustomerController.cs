@@ -55,5 +55,28 @@ namespace dotNetApiExample.Controllers
             await _myDbContext.SaveChangesAsync();
             return Ok(resource);
         }
+
+        // PUT api/customers
+        [HttpPut(CustomerEndpoints.Put)]
+        public async Task<ActionResult<Customer>> Put([FromBody] Customer resource)
+        {
+            _logger.LogInformation($"Executing PUT request to endpoint '{CustomerEndpoints.Put}'");
+            if (resource.CustomerId == null)
+            {
+                return BadRequest("Property 'customerId' must not be sent as null");
+            }
+            Customer serverResource = await _myDbContext.Customers.FindAsync(resource.CustomerId);
+            if (serverResource == null)
+            {
+                return BadRequest("Resource not found");
+            }
+            serverResource.CustomerId = resource.CustomerId;
+            serverResource.Name = resource.Name;
+            serverResource.CreditLine = resource.CreditLine;
+            serverResource.IsVip = resource.IsVip;
+            serverResource.MemberSince = resource.MemberSince;
+            await _myDbContext.SaveChangesAsync();
+            return Ok(serverResource);
+        }
     }
 }
