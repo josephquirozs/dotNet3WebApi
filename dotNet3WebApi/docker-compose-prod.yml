@@ -1,0 +1,13 @@
+version: "3.5"
+services:
+  my-dotnet-api:
+    container_name: my-dotnet-api
+    image: my-dotnet-api-image:0.0.1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "41003:41003"
+    environment:
+      - "ASPNETCORE_URLS=http://*:41003"
+      - "TZ=America/Lima"
